@@ -74,15 +74,15 @@ object SparkRDDTaskFour {
     spark.sparkContext.setLogLevel("WARN")
 
     case class IgnoreOrderTuple[T]( a:T, b:T ) {
-      override def equals( that:Any ) = that match {
+      override def equals( that:Any ):Boolean = that match {
         case that:IgnoreOrderTuple[T] => ( that canEqual this ) && (
           this.a == that.a && this.b == that.b ||
             this.a == that.b && this.b == that.a
           )
         case _ => false
       }
-      override def canEqual( that:Any ) = that.isInstanceOf[IgnoreOrderTuple[T]]
-      override def hashCode = a.hashCode + b.hashCode
+      override def canEqual( that:Any ):Boolean = that.isInstanceOf[IgnoreOrderTuple[T]]
+      override def hashCode:Int = a.hashCode + b.hashCode
     }
 
     val moviesRdd = spark.sparkContext.textFile("movies.tsv")
